@@ -1,0 +1,11 @@
+{
+  "name": "Sector V",
+  "short_name": "Sector V",
+  "start_url": "/",
+  "display": "standalone",
+  "default_locale": "en",
+  "background_color": "#FFFFFF",
+  "theme_color": "#000000",
+  "icons": [
+  ]
+}

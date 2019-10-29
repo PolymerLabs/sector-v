@@ -1,0 +1,29 @@
+{
+  "name": "sector-v",
+  "version": "0.0.1",
+  "description": "MD Hack Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "dev": "polyserve --npm"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PolymerLabs/SectorV.git"
+  },
+  "author": "",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/PolymerLabs/SectorV/issues"
+  },
+  "homepage": "https://github.com/PolymerLabs/SectorV#readme",
+  "dependencies": {
+    "lit-element": "^2.2.1"
+  },
+  "devDependencies": {
+    "polyserve": "^0.27.15",
+    "typescript": "^3.6.4"
+  }
+}
