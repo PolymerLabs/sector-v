@@ -3,6 +3,9 @@
 
 <head>
   <title>Elliott Marquez</title>
+  <script>
+    delete Document.prototype.adoptedStyleSheets;
+  </script>
 
   <meta name="theme-color" content="#000000">
   <meta name="msapplication-navbutton-color" content="#000000">
@@ -10,19 +13,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="manifest" href="/manifest.json">
   <!-- <link rel="icon" type="image/ico" href="/assets/img/favicon.ico?v=1"> -->
-  <script>
-    // if ('serviceWorker' in navigator) {
-    //   window.addEventListener('load', function () {
-    //     navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
-    //       // Registration was successful
-    //       console.log('ServiceWorker registration successful with scope: ', registration.scope);
-    //     }).catch(function (err) {
-    //       // registration failed :(
-    //       console.log('ServiceWorker registration failed: ', err);
-    //     });
-    //   });
-    // }
-  </script>
+  <!-- <script src="/lib/load-sw.js"></script> -->
 
   <style>
     body {
@@ -32,27 +23,22 @@
       overflow-x: hidden;
     }
   </style>
-  <script nomodule>
-      document.write('<!-- IE doesn\'t support this');
-      window.doesNotSupportModules = true;
-    </script>
-    <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-    <script type="module" src="/lib/index.js"></script>
-    <!--! do not remove for IE11 -->
-    <script nomodule>
-      if (!window.doesNotSupportModules) {
-        document.write('<!-- only for IE');
-      }
-    </script>
+  <script nomodule src="/lib/nomodule-check.js"></script>
+  <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script type="module" src="/lib/components/knd-app.js"></script>
+  <!--! do not remove for IE11 -->
+  <script src="/lib/comment-out-ie.js"></script>
   <script nomodule type="application/javascript" src="https://unpkg.com/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
   <script nomodule type="application/javascript" src="https://unpkg.com/@polymer/esm-amd-loader"></script>
   <script nomodule type="application/javascript" src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-  <script nomodule type="application/javascript" src="/fallback/index.js"></script>
+  <script nomodule type="application/javascript" src="/fallback/components/knd-app.js"></script>
   <!--! do not remove for IE11 -->
 </head>
 <body>
   <noscript>
     Sorry, but this page won't work without javascript rn :(
   </noscript>
+
+  <knd-app></knd-app>
 </body>
 </html>
