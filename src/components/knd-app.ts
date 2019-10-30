@@ -4,9 +4,10 @@ import './test-widget';
 import { WidgetSize } from '../util/types';
 
 import '@material/mwc-button';
+import { size100x, size1x } from '../util/base-styles';
 @customElement('knd-app')
 export class KndApp extends LitElement {
-  @property({type: String}) size: WidgetSize = 'medium';
+  @property({type: String}) size: WidgetSize = 'large';
 
   static get styles() {
     return css`
@@ -39,6 +40,17 @@ export class KndApp extends LitElement {
 
       #widgetWrapper {
         width: 100%;
+      }
+
+      #widgetWrapper > * {
+        max-width: ${size100x};
+      }
+
+      @media (min-width: 830px) {
+        #widgetWrapper[size="large"] > * {
+          margin-left: auto;
+          margin-right: auto;
+        }
       }
     `;
   }

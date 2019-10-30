@@ -8,6 +8,7 @@ export const size5x = css`40px`;
 export const size10x = css`80px`;
 export const size45x = css`360px`;
 export const size25x = css`200px`;
+export const size100x = css`800px`;
 
 export const radius1x = css`8px`;
 export const radius3x = css`23px`;
