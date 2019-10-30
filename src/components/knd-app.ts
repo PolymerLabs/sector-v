@@ -6,7 +6,7 @@ import { WidgetSize } from '../util/types';
 import '@material/mwc-button';
 @customElement('knd-app')
 export class KndApp extends LitElement {
-  @property({type: String}) size: WidgetSize = 'large';
+  @property({type: String}) size: WidgetSize = 'medium';
 
   static get styles() {
     return css`
@@ -14,9 +14,6 @@ export class KndApp extends LitElement {
         display: block;
         width: 100%;
 
-        --knd-theme-primary-h: 140deg;
-        --knd-theme-primary-s: 77%;
-        --knd-theme-primary-l: 28%;
         --knd-theme-primary: hsl(var(--knd-theme-primary-h), var(--knd-theme-primary-s), var(--knd-theme-primary-l));
         --mdc-theme-primary: var(--knd-theme-primary);
 
