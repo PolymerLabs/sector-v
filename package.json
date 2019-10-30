@@ -20,6 +20,13 @@
   },
   "homepage": "https://github.com/PolymerLabs/SectorV#readme",
   "dependencies": {
+    "@material/mwc-button": "^0.10.0",
+    "@material/mwc-checkbox": "^0.10.0",
+    "@material/mwc-formfield": "^0.10.0",
+    "@material/mwc-icon-button": "^0.10.0",
+    "@material/mwc-ripple": "^0.10.0",
+    "@material/mwc-tab": "^0.10.0",
+    "@material/mwc-tab-bar": "^0.10.0",
     "lit-element": "^2.2.1"
   },
   "devDependencies": {
