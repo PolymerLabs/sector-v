@@ -2,9 +2,11 @@ import {LitElement, customElement, html, css, property} from 'lit-element';
 
 import './test-widget';
 import { WidgetSize } from '../util/types';
+
+import '@material/mwc-button';
 @customElement('knd-app')
 export class KndApp extends LitElement {
-  @property({type: String}) size: WidgetSize = 'medium';
+  @property({type: String}) size: WidgetSize = 'large';
 
   static get styles() {
     return css`
@@ -34,6 +36,10 @@ export class KndApp extends LitElement {
         font-family: Barlow, sans-serif;
       }
 
+      #buttons {
+        background-color: var(--knd-theme-surface);
+      }
+
       #widgetWrapper {
         width: 100%;
       }
@@ -46,6 +52,12 @@ export class KndApp extends LitElement {
         <test-widget size=${this.size}></test-widget>
         <test-widget size=${this.size}></test-widget>
         <test-widget size=${this.size}></test-widget>
+      </div>
+      <div id="buttons">
+        <mwc-button label="tiny" @click=${() => this.size = 'tiny'}></mwc-button>
+        <mwc-button label="small" @click=${() => this.size = 'small'}></mwc-button>
+        <mwc-button label="medium" @click=${() => this.size = 'medium'}></mwc-button>
+        <mwc-button label="large" @click=${() => this.size = 'large'}></mwc-button>
       </div>
     `;
   }

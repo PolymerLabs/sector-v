@@ -112,8 +112,7 @@ export class TestWidget extends KndWidgetBase {
         <div class="divider"></div>
         <mwc-formfield label="checked">
           <mwc-checkbox checked></mwc-checkbox>
-        </mwc-formfield>
-    `;
+        </mwc-formfield>`;
 
     return html`
       <h1 id="title">
@@ -124,22 +123,20 @@ export class TestWidget extends KndWidgetBase {
         <mwc-tab label="Done"></mwc-tab>
       </mwc-tab-bar>
       <div>
-        ${this.showTodo ? todo : done};
-      </div>
-    `;
+        ${this.showTodo ? todo : done}
+      </div>`;
   }
 
   protected tabBarActivated() {
     const tabBar = this.tabBar;
-    console.log('activated');
+
     if (tabBar) {
-      console.log(tabBar.activeIndex)
       const index = tabBar.activeIndex;
       this.showTodo = index === 0;
     }
   }
 
   renderLarge() {
-    return html``;
+    return this.renderMedium();
   }
 };

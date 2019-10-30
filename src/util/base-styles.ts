@@ -10,6 +10,7 @@ export const size45x = css`360px`;
 export const size25x = css`200px`;
 
 export const radius1x = css`8px`;
+export const radius3x = css`23px`;
 
 export const fontSize1x = css`18px`;
 export const fontSize2x = css`36px`;
