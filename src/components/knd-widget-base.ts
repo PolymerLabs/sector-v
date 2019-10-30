@@ -4,7 +4,7 @@ import { WidgetSize } from '../util/types';
 import './knd-small';
 
 import '@material/mwc-ripple';
-import { size3x, size1x, radius1x, size2x, size10x, fontSize8x, fontSize2x, size5x, size45x, size25x, radius3x } from '../util/base-styles';
+import { size3x, size1x, radius1x, size2x, size10x, fontSize3x, fontSize2x, size5x, size45x, size25x, radius3x } from '../util/base-styles';
 
 export abstract class KndWidgetBase extends LitElement {
   @property({
@@ -60,8 +60,8 @@ export abstract class KndWidgetBase extends LitElement {
         width: ${size10x};
         height: ${size10x};
         overflow: hidden;
-        font-size: ${fontSize8x};
-        --mdc-icon-size: ${fontSize8x};
+        font-size: ${fontSize3x};
+        --mdc-icon-size: ${fontSize3x};
       }
 
       :host([size="small"]) {
