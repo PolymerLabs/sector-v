@@ -4,7 +4,7 @@ import './test-widget';
 import { WidgetSize } from '../util/types';
 @customElement('knd-app')
 export class KndApp extends LitElement {
-  @property({type: String}) size: WidgetSize = 'small';
+  @property({type: String}) size: WidgetSize = 'medium';
 
   static get styles() {
     return css`
@@ -19,6 +19,17 @@ export class KndApp extends LitElement {
         --mdc-theme-primary: var(--knd-theme-primary);
 
         --knd-theme-surface: hsl(calc(var(--knd-theme-primary-h) - 4deg), calc(var(--knd-theme-primary-s) - 33%), calc(var(--knd-theme-primary-l) + 67%));
+        --mdc-theme-surface: var(--knd-theme-surface);
+
+        --knd-theme-on-surface: hsl(calc(var(--knd-theme-primary-h) - 2deg), calc(var(--knd-theme-primary-s) - 59%), calc(var(--knd-theme-primary-l) + 42%));
+        --mdc-theme-on-surface: var(--knd-theme-on-surface);
+
+
+        --knd-theme-secondary-h: 31deg;
+        --knd-theme-secondary-s: 100%;
+        --knd-theme-secondary-l: 45%;
+        --knd-theme-secondary: hsl(var(--knd-theme-secondary-h), var(--knd-theme-secondary-s), var(--knd-theme-secondary-l));
+        --mdc-theme-secondary: var(--knd-theme-secondary);
 
         font-family: Barlow, sans-serif;
       }
