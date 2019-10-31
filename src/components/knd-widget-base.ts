@@ -4,6 +4,7 @@ import { WidgetSize } from '../util/types';
 import './knd-small';
 
 import '@material/mwc-ripple';
+import '@material/mwc-fab';
 import { size3x, size1x, radius1x, size2x, size10x, fontSize3x, fontSize2x, size5x, size45x, radius3x } from '../util/base-styles';
 
 export abstract class KndWidgetBase extends LitElement {
@@ -16,6 +17,10 @@ export abstract class KndWidgetBase extends LitElement {
 
   static get styles(): CSSResult|CSSResult[] {
     return css`
+      :host {
+        position: relative;
+      }
+
       :host([size="tiny"]),
       :host([size="medium"]),
       :host([size="large"]) {
@@ -51,8 +56,7 @@ export abstract class KndWidgetBase extends LitElement {
         padding: ${size2x};
       }
 
-      :host([size="tiny"]),
-      :host([size="medium"]) {
+      :host([size="tiny"]) {
         display: inline-block;
       }
 
@@ -81,7 +85,6 @@ export abstract class KndWidgetBase extends LitElement {
       }
 
       :host([size="medium"]) #knd-widget-base-wrapper {
-        max-width: ${size45x};
         max-height: ${size45x};
       }
 
@@ -104,8 +107,44 @@ export abstract class KndWidgetBase extends LitElement {
         height: 85%;
       }
 
-      :host([size="large"]) {
+      :host([size="large"]),
+      :host([size="medium"]) {
         display: block;
+      }
+
+      #knd-widget-base-wrapper {
+        position: relative;
+        z-index: 2;
+      }
+
+      #knd-widget-expand, #knd-widget-remove {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        transition: transform ease-out 0.2s;
+        padding: ${size1x};
+        z-index: 1;
+      }
+      #knd-widget-expand {
+        transform: translate(0%, 0%);
+        --mdc-theme-secondary: #0091EA;
+        --mdc-theme-on-secondary: white;
+      }
+      #knd-widget-remove {
+        transform: translate(0%, 100%);
+        --mdc-theme-secondary: #D50000;
+        --mdc-theme-on-secondary: white;
+      }
+      :host(:hover) #knd-widget-expand {
+        transform: translate(100%, 0%);
+      }
+      :host(:hover) #knd-widget-remove {
+        transform: translate(100%, 100%);
+        transition-delay: 0.05s;
+      }
+      :host(:not([size="medium"])) #knd-widget-expand,
+      :host(:not([size="medium"])) #knd-widget-remove {
+        display: none;
       }
     `;
   }
@@ -133,7 +172,10 @@ export abstract class KndWidgetBase extends LitElement {
         return neverReached(this.size);
     }
 
-    return html`<div id="knd-widget-base-wrapper">${contents}</div>`
+    return html`
+      <div id="knd-widget-base-wrapper">${contents}</div>
+      <div id="knd-widget-expand"><mwc-fab mini icon="fullscreen"></mwc-fab></div>
+      <div id="knd-widget-remove"><mwc-fab mini icon="clear"></mwc-fab></div>`;
   }
 
   protected abstract renderTiny(): TemplateResult;
