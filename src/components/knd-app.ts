@@ -59,7 +59,8 @@ export class KndApp extends LitElement {
       }
 
       @media (min-width: 830px) {
-        #widgetWrapper[size="large"] > * {
+        #widgetWrapper[size="large"] > *,
+        #widgetWrapper[size="medium"] > * {
           margin-left: auto;
           margin-right: auto;
         }
