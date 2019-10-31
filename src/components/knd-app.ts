@@ -2,13 +2,21 @@ import {LitElement, customElement, html, css, property} from 'lit-element';
 
 import './test-widget';
 import './knd-widget-hue';
+import './knd-calculator';
 import { WidgetSize } from '../util/types';
 
 import '@material/mwc-button';
 import { size100x, fontSize1x } from '../util/base-styles';
+
+const sizes: ReadonlySet<WidgetSize> = new Set<WidgetSize>(['tiny', 'small', 'medium', 'large']);
+function isSize(s: string): s is WidgetSize {
+  return sizes.has(s as WidgetSize);
+}
+const defaultSize = 'medium';
+
 @customElement('knd-app')
 export class KndApp extends LitElement {
-  @property({type: String}) protected size: WidgetSize = 'medium';
+  @property({type: String}) protected size: WidgetSize = defaultSize;
 
   static get styles() {
     return css`
@@ -59,19 +67,56 @@ export class KndApp extends LitElement {
     `;
   }
 
+  private updateSize(size: WidgetSize) {
+    this.size = size;
+    if (size === defaultSize) {
+      // We want no hash at all. This is the only way lol.
+      history.pushState(
+          null, document.title,
+          window.location.pathname + window.location.search);
+    } else {
+      window.location.hash = size;
+    }
+  }
+
   render() {
     return html`
+      <div id="buttons">
+        <mwc-button label="tiny" @click=${() => this.updateSize('tiny')}></mwc-button>
+        <mwc-button label="small" @click=${() => this.updateSize('small')}></mwc-button>
+        <mwc-button label="medium" @click=${() => this.updateSize('medium')}></mwc-button>
+        <mwc-button label="large" @click=${() => this.updateSize('large')}></mwc-button>
+      </div>
+
       <div id="widgetWrapper" size=${this.size}>
+        <knd-widget-calculator size=${this.size}></knd-widget-calculator>
         <knd-widget-hue size=${this.size}></knd-widget-hue>
         <test-widget size=${this.size}></test-widget>
         <test-widget size=${this.size}></test-widget>
       </div>
-      <div id="buttons">
-        <mwc-button label="tiny" @click=${() => this.size = 'tiny'}></mwc-button>
-        <mwc-button label="small" @click=${() => this.size = 'small'}></mwc-button>
-        <mwc-button label="medium" @click=${() => this.size = 'medium'}></mwc-button>
-        <mwc-button label="large" @click=${() => this.size = 'large'}></mwc-button>
-      </div>
+
     `;
+  }
+
+  private readonly onHashChange = () => {
+    console.log('hash changed');
+    const hash = window.location.hash.slice(1);
+    if (isSize(hash)) {
+      this.size = hash;
+    } else if (hash === '') {
+      this.size = defaultSize;
+    }
+  };
+  connectedCallback() {
+    super.connectedCallback();
+    window.addEventListener('hashchange', this.onHashChange);
+    window.addEventListener('popstate', this.onHashChange);
+    this.onHashChange();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    window.removeEventListener('hashchange', this.onHashChange);
+    window.removeEventListener('popstate', this.onHashChange);
   }
 }
