@@ -4,7 +4,7 @@ export const loadMaterialFonts = () => {
   if (!matIconsLink) {
     const newLink = document.createElement('link');
     newLink.rel = 'stylesheet';
-    newLink.href = 'https://fonts.googleapis.com/css?family=Material+Icons&display=block';
+    newLink.href = 'https://fonts.googleapis.com/css?family=Material+Icons+Outlined&display=block';
     newLink.toggleAttribute('material-icons', true);
     document.head.appendChild(newLink);
   }
