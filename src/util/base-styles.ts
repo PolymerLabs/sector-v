@@ -13,6 +13,6 @@ export const size100x = css`calc(${size1x} * 100)`;
 export const radius1x = css`8px`;
 export const radius3x = css`calc(${radius1x} * 3)`;
 
-export const fontSize1x = css`18px`;
+export const fontSize1x = css`16px`;
 export const fontSize2x = css`calc(${fontSize1x} * 2)`;
 export const fontSize3x = css`calc(${fontSize1x} * 3)`;

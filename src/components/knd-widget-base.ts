@@ -4,7 +4,7 @@ import { WidgetSize } from '../util/types';
 import './knd-small';
 
 import '@material/mwc-ripple';
-import { size3x, size1x, radius1x, size2x, size10x, fontSize3x, fontSize2x, size5x, size45x, size25x, radius3x } from '../util/base-styles';
+import { size3x, size1x, radius1x, size2x, size10x, fontSize3x, fontSize2x, size5x, size45x, radius3x } from '../util/base-styles';
 
 export abstract class KndWidgetBase extends LitElement {
   @property({
@@ -82,15 +82,15 @@ export abstract class KndWidgetBase extends LitElement {
 
       :host([size="medium"]) #knd-widget-base-wrapper {
         max-width: ${size45x};
-        max-height: ${size25x};
-        overflow-y: scroll;
-        overflow-x: hidden;
+        max-height: ${size45x};
       }
 
       :host([size="medium"]) #knd-widget-base-wrapper,
       :host([size="large"]) #knd-widget-base-wrapper {
         -ms-overflow-style: none;
         scrollbar-width: none;
+        overflow-y: scroll;
+        overflow-x: hidden;
       }
 
       :host([size="medium"]) #knd-widget-base-wrapper::-webkit-scrollbar,
