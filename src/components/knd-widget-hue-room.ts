@@ -1,11 +1,15 @@
-import { customElement, LitElement, html, property, css } from "lit-element";
+import { customElement, LitElement, html, property, css, query } from "lit-element";
+import {Slider} from '@material/mwc-slider';
 
 import '@material/mwc-checkbox';
 import { size1x, size2x, fontSize2x } from "../util/base-styles";
 
+
 @customElement('knd-widget-hue-room')
 export class KndWidgetHueFixture extends LitElement {
   @property({type: String}) name = '';
+
+  @query('#fixtures') fixtures!: HTMLDivElement | null;
 
   static get styles() {
     return css`
@@ -21,6 +25,14 @@ export class KndWidgetHueFixture extends LitElement {
         margin-right: calc(${size2x} * -1);
         padding-left: ${size2x};
         padding-right: ${size2x};
+
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      #fixtures::-webkit-scrollbar,
+      #fixtures::-webkit-scrollbar {
+        display: none;
       }
 
       #fixtures ::slotted(*) {
@@ -34,10 +46,37 @@ export class KndWidgetHueFixture extends LitElement {
     `;
   }
 
+  onWheel(e: WheelEvent) {
+    const fixturesWrapper = this.fixtures;
+
+    if (!fixturesWrapper) {
+      return;
+    }
+
+    const dy = e.deltaY;
+    const oldScrollLeft = fixturesWrapper.scrollLeft;
+    fixturesWrapper.scrollLeft += dy;
+
+    if (oldScrollLeft !== fixturesWrapper.scrollLeft) {
+      e.preventDefault();
+    }
+  }
+
+  onTouchmove(e: Event) {
+    const path = e.composedPath();
+
+    for (let el of path) {
+      if (el instanceof Slider) {
+        e.preventDefault();
+        break;
+      }
+    }
+  }
+
   render() {
     return html`
       <div id="name">${this.name}</div>
-      <div id="fixtures">
+      <div id="fixtures" @wheel=${this.onWheel} @touchmove=${this.onTouchmove}>
         <slot></slot>
       </div>
     `;
