@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="manifest" href="/manifest.json" />
   <!-- <link rel="icon" type="image/ico" href="/assets/img/favicon.ico?v=1"> -->
-  <!-- <script src="/lib/load-sw.js"></script> -->
+  <script src="/lib/load-sw.js"></script>
 
   <style>
     html,
@@ -32,31 +32,23 @@
       overflow: hidden;
     }
   </style>
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css?family=Barlow&display=swap"
-  />
+  <link rel="stylesheet" href="/external_libs/barlow.css" />
   <script nomodule src="/lib/nomodule-check.js"></script>
-  <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-  <script src="https://unpkg.com/pouchdb@7.1.1/dist/pouchdb.min.js"></script>
-  <script src="https://unpkg.com/pouchdb-upsert@2.2.0/dist/pouchdb.upsert.min.js"></script>
+  <script src="/external_libs/webcomponents-loader.js"></script>
+  <script src="/external_libs/pouchdb.min.js"></script>
+  <script src="/external_libs/pouchdb.upsert.min.js"></script>
   <script type="module" src="/lib/components/knd-app.js"></script>
   <!--! do not remove for IE11 -->
   <script src="/lib/comment-out-ie.js"></script>
   <script
     nomodule
     type="application/javascript"
-    src="https://unpkg.com/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"
+    src="/external_libs/custom-elements-es5-adapter.js"
   ></script>
   <script
     nomodule
     type="application/javascript"
-    src="https://unpkg.com/@polymer/esm-amd-loader"
-  ></script>
-  <script
-    nomodule
-    type="application/javascript"
-    src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"
+    src="/external_libs/esm-amd-loader.min.js"
   ></script>
   <script
     nomodule
