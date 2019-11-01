@@ -1,29 +1,27 @@
+import '@material/mwc-fab';
+import '@material/mwc-ripple';
 import {
+  css,
+  CSSResult,
+  html,
   LitElement,
   property,
-  TemplateResult,
-  html,
-  css,
-  CSSResult
+  TemplateResult
 } from 'lit-element';
-import { WidgetSize } from '../util/types';
-
-import './knd-small';
-
-import '@material/mwc-ripple';
-import '@material/mwc-fab';
 import {
-  size3x,
-  size1x,
-  radius1x,
-  size2x,
-  size10x,
-  fontSize3x,
   fontSize2x,
-  size5x,
+  fontSize3x,
+  radius1x,
+  radius3x,
+  size10x,
+  size1x,
+  size2x,
+  size3x,
   size45x,
-  radius3x
+  size5x
 } from '../util/base-styles';
+import { WidgetSize } from '../util/types';
+import './knd-small';
 
 /**
  * @fires expand-widget
@@ -127,7 +125,11 @@ export abstract class KndWidgetBase extends LitElement {
       :host([size='large']) #knd-widget-base-wrapper {
         display: block;
         border-radius: ${radius3x};
-        height: 85%;
+        max-height: 70vh;
+      }
+
+      :host([size='large']) {
+        margin: ${size3x};
       }
 
       :host([size='large']),

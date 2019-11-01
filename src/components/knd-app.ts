@@ -1,44 +1,36 @@
-import './test-widget';
-import './knd-widget-hue';
-import './knd-calculator';
 import '@material/mwc-button';
+import '@material/mwc-dialog';
+import { Dialog } from '@material/mwc-dialog';
+import '@material/mwc-fab';
+import '@material/mwc-formfield';
+import '@material/mwc-icon';
+import '@material/mwc-radio';
+import { Radio } from '@material/mwc-radio';
 import {
-  LitElement,
+  css,
   customElement,
   html,
-  css,
+  LitElement,
   property,
   query,
   TemplateResult
 } from 'lit-element';
 import { until } from 'lit-html/directives/until';
-
-import './test-widget';
-import './knd-widget-hue';
-import './knd-calculator';
-
-import { WidgetSize, WidgetDescriptor } from '../util/types';
-import {
-  PouchDB,
-  DB_NAME,
-  WidgetsSchema,
-  docNames,
-  schemaToDescriptor
-} from '../util/db';
-
-import '@material/mwc-button';
-import '@material/mwc-fab';
-import '@material/mwc-dialog';
-import '@material/mwc-radio';
-import '@material/mwc-formfield';
-import '@material/mwc-icon';
-
-import { Dialog } from '@material/mwc-dialog';
-import { Radio } from '@material/mwc-radio';
 import { fontSize1x, size1x } from '../util/base-styles';
-import { generatePseudoUid, isIdInWidgetNames } from '../util/uid';
-import { loadMaterialFonts } from '../util/font-loader';
 import { WIDGETS } from '../util/constants';
+import {
+  DB_NAME,
+  docNames,
+  PouchDB,
+  schemaToDescriptor,
+  WidgetsSchema
+} from '../util/db';
+import { loadMaterialFonts } from '../util/font-loader';
+import { WidgetDescriptor, WidgetSize } from '../util/types';
+import { generatePseudoUid, isIdInWidgetNames } from '../util/uid';
+import './knd-calculator';
+import './knd-widget-hue';
+import './test-widget';
 
 const sizes: ReadonlySet<WidgetSize> = new Set<WidgetSize>([
   'tiny',
@@ -56,7 +48,10 @@ export class KndApp extends LitElement {
   @query('#addWidgetDialog') addWidgetDialog!: Dialog | null;
   @query('mwc-radio[name="addWidget"][checked]')
   checkedAddWidgetRadio!: Radio | null;
-  @property({ type: String }) protected size: WidgetSize = defaultSize;
+  @property({ type: String, attribute: 'size', reflect: true })
+  protected size: WidgetSize = defaultSize;
+  @property({ type: String, attribute: 'screen-size', reflect: true })
+  protected screenSize: 'mobile' | 'desktop' = 'desktop';
   @property({ type: Boolean }) protected openAddWidgetDialog = false;
 
   private _activeWidgetId: string | null = null;
@@ -105,6 +100,9 @@ export class KndApp extends LitElement {
 
   static get styles() {
     return css`
+      :host([size='large']) {
+        height: 100vh;
+      }
       :host {
         display: block;
         width: 100%;
@@ -159,31 +157,26 @@ export class KndApp extends LitElement {
         max-width: 830px;
       }
 
-      #widgetWrapper[size='medium'] {
+      :host([size='medium']) #widgetWrapper {
         grid-template-columns: repeat(2, calc(50% - 20px));
       }
-      #widgetWrapper[size='large'] {
+      :host([size='large']) #widgetWrapper {
         grid-template-columns: 100%;
       }
 
-      #widgetWrapper[size='medium'] > * {
+      :host([size='medium']) #widgetWrapper > * {
         z-index: 1;
       }
-      #widgetWrapper[size='medium'] > knd-widget-hue:hover,
-      #widgetWrapper[size='medium'] > knd-widget-calculator:hover,
-      #widgetWrapper[size='medium'] > test-widget:hover {
+      :host([size='medium']) #widgetWrapper > knd-widget-hue:hover,
+      :host([size='medium']) #widgetWrapper > knd-widget-calculator:hover,
+      :host([size='medium']) #widgetWrapper > test-widget:hover {
         z-index: 2;
       }
 
-      #widgetWrapper[size='large'] > *[active] {
+      :host([size='large']) #widgetWrapper > *[active] {
         display: block;
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        right: 20px;
-        bottom: 60px;
       }
-      #widgetWrapper[size='large'] > * {
+      :host([size='large']) #widgetWrapper > * {
         display: none;
       }
 
@@ -206,42 +199,41 @@ export class KndApp extends LitElement {
         display: block;
       }
 
-      #exitWidget {
+      #exitWidget,
+      .spacer {
         display: none;
-        position: fixed;
         --mdc-icon-size: 64px;
         color: white;
         cursor: pointer;
       }
-      #exitWidget[size='large'] {
-        display: block;
-        bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-      }
-    `;
-  }
 
-  renderSizeButtons() {
-    return html`
-      <div id="buttons">
-        <mwc-button
-          label="tiny"
-          @click=${() => this.updateSize('tiny')}
-        ></mwc-button>
-        <mwc-button
-          label="small"
-          @click=${() => this.updateSize('small')}
-        ></mwc-button>
-        <mwc-button
-          label="medium"
-          @click=${() => this.updateSize('medium')}
-        ></mwc-button>
-        <mwc-button
-          label="large"
-          @click=${() => this.updateSize('large')}
-        ></mwc-button>
-      </div>
+      :host([size='large']) #widgetWrapper,
+      :host([size='large']) #exitWidget {
+        align-items: center;
+        display: block;
+      }
+
+      :host([size='large']) #widgetWrapper {
+        width: 100%;
+      }
+
+      #exitWidget {
+        margin: 0 auto 0 auto;
+        height: 10vh;
+      }
+
+      :host([size='large']) #root {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      :host([size='large']):host([screen-size='mobile']) .top.spacer,
+      :host([size='large']):host([screen-size='desktop']) .bottom.spacer {
+        display: block;
+        flex-grow: 1;
+      }
     `;
   }
 
@@ -275,21 +267,22 @@ export class KndApp extends LitElement {
       `;
     });
     return html`
-      <!-- For debuggin' -->
-      <!-- ${this.renderSizeButtons()} -->
-
-      <div
-        id="widgetWrapper"
-        size=${this.size}
-        @close-widget=${this.onCloseWidget}
-        @expand-widget=${this.onExpandWidget}
-      >
-        ${until(widgetsRendered)}
+      <div id="root" size=${this.size}>
+        <div class="top spacer"></div>
+        <div
+          id="widgetWrapper"
+          @close-widget=${this.onCloseWidget}
+          @expand-widget=${this.onExpandWidget}
+        >
+          ${until(widgetsRendered)}
+        </div>
+        <div class="bottom spacer"></div>
+        <mwc-icon id="exitWidget" @click=${this.onExitWidget}>
+          keyboard_arrow_up
+        </mwc-icon>
+        <mwc-fab icon="add" @click=${this.onAddWidgetClick}></mwc-fab>
       </div>
-      <mwc-icon id="exitWidget" size=${this.size} @click=${this.onExitWidget}>
-        keyboard_arrow_up
-      </mwc-icon>
-      <mwc-fab icon="add" @click=${this.onAddWidgetClick}></mwc-fab>
+
       <mwc-dialog
         id="addWidgetDialog"
         ?open=${this.openAddWidgetDialog}
@@ -340,11 +333,12 @@ export class KndApp extends LitElement {
   };
 
   private readonly onWindowResize = () => {
+    const size = window.innerWidth < 600 ? 'small' : 'medium';
+    this.screenSize = size === 'small' ? 'mobile' : 'desktop';
+
     if (this.size === 'large') {
       return;
     }
-
-    const size = window.innerWidth < 600 ? 'small' : 'medium';
 
     if (size !== this.size) {
       this.size = size;
