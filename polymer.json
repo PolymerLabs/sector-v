@@ -1,0 +1,42 @@
+{
+  "entrypoint": "index.html",
+  "shell": "lib/components/knd-app.js",
+  "builds": [
+    {
+      "name": "default",
+      "js": {
+        "minify": true,
+        "compile": false
+      },
+      "css": {
+        "minify": true
+      },
+      "html": {
+        "minify": true
+      },
+      "bundle": true,
+      "addServiceWorker": true
+    },
+    {
+      "name": "fallback",
+      "js": {
+        "minify": true,
+        "compile": true,
+        "transformModulesToAmd": true
+      },
+      "css": {
+        "minify": true
+      },
+      "html": {
+        "minify": true
+      },
+      "bundle": true,
+      "addServiceWorker": true
+    }
+  ],
+  "sources": ["assets/**/**", "lib/*.js", "external_libs/*"],
+  "extraDependencies": ["manifest.json"],
+  "lint": {
+    "rules": ["polymer-3"]
+  }
+}

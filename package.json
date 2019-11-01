@@ -6,8 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
+    "build:prod": "polymer build",
     "watch": "tsc --watch",
-    "dev": "polyserve --npm"
+    "dev": "polyserve --npm",
+    "dev:prod": "firebase serve"
   },
   "repository": {
     "type": "git",
