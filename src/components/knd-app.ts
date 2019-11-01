@@ -100,8 +100,8 @@ export class KndApp extends LitElement {
       </div>
 
       <div id="widgetWrapper" size=${this.size}>
-        <knd-widget-calculator size=${this.size}></knd-widget-calculator>
         <knd-widget-hue size=${this.size}></knd-widget-hue>
+        <knd-widget-calculator size=${this.size}></knd-widget-calculator>
         <test-widget size=${this.size}></test-widget>
         <test-widget size=${this.size}></test-widget>
       </div>
