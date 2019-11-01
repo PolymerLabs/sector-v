@@ -14,6 +14,7 @@ export interface WidgetName {
 }
 export interface WidgetsSchema {
   names: WidgetName[];
+  active: string | null;
 }
 
 export interface DBSchema {

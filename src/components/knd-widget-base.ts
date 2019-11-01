@@ -5,13 +5,13 @@ import {
   html,
   css,
   CSSResult
-} from "lit-element";
-import { WidgetSize } from "../util/types";
+} from 'lit-element';
+import { WidgetSize } from '../util/types';
 
-import "./knd-small";
+import './knd-small';
 
-import "@material/mwc-ripple";
-import "@material/mwc-fab";
+import '@material/mwc-ripple';
+import '@material/mwc-fab';
 import {
   size3x,
   size1x,
@@ -23,9 +23,10 @@ import {
   size5x,
   size45x,
   radius3x
-} from "../util/base-styles";
+} from '../util/base-styles';
 
 /**
+ * @fires expand-widget
  * @fires close-widget
  * @fires update-doc
  */
@@ -33,9 +34,9 @@ export abstract class KndWidgetBase extends LitElement {
   @property({
     type: String,
     reflect: true,
-    attribute: "size"
+    attribute: 'size'
   })
-  size: WidgetSize = "small";
+  size: WidgetSize = 'small';
 
   static get styles(): CSSResult | CSSResult[] {
     return css`
@@ -43,18 +44,18 @@ export abstract class KndWidgetBase extends LitElement {
         position: relative;
       }
 
-      :host([size="tiny"]),
-      :host([size="medium"]),
-      :host([size="large"]) {
+      :host([size='tiny']),
+      :host([size='medium']),
+      :host([size='large']) {
         margin: ${size1x};
       }
 
-      :host([size="tiny"]) {
+      :host([size='tiny']) {
         -webkit-tap-highlight-color: transparent;
       }
 
-      :host([size="tiny"]) #knd-widget-base-wrapper,
-      :host([size="small"]) #knd-widget-base-wrapper {
+      :host([size='tiny']) #knd-widget-base-wrapper,
+      :host([size='small']) #knd-widget-base-wrapper {
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -64,25 +65,25 @@ export abstract class KndWidgetBase extends LitElement {
         color: var(--knd-theme-primary);
       }
 
-      :host([size="tiny"]) #knd-widget-base-wrapper,
-      :host([size="small"]) #knd-widget-base-wrapper,
-      :host([size="medium"]) #knd-widget-base-wrapper,
-      :host([size="large"]) #knd-widget-base-wrapper {
+      :host([size='tiny']) #knd-widget-base-wrapper,
+      :host([size='small']) #knd-widget-base-wrapper,
+      :host([size='medium']) #knd-widget-base-wrapper,
+      :host([size='large']) #knd-widget-base-wrapper {
         border-radius: ${radius1x};
         background-color: var(--knd-theme-surface);
       }
 
-      :host([size="small"]) #knd-widget-base-wrapper,
-      :host([size="medium"]) #knd-widget-base-wrapper,
-      :host([size="large"]) #knd-widget-base-wrapper {
+      :host([size='small']) #knd-widget-base-wrapper,
+      :host([size='medium']) #knd-widget-base-wrapper,
+      :host([size='large']) #knd-widget-base-wrapper {
         padding: ${size2x};
       }
 
-      :host([size="tiny"]) {
+      :host([size='tiny']) {
         display: inline-block;
       }
 
-      :host([size="tiny"]) #knd-widget-base-wrapper {
+      :host([size='tiny']) #knd-widget-base-wrapper {
         width: ${size10x};
         height: ${size10x};
         overflow: hidden;
@@ -90,14 +91,14 @@ export abstract class KndWidgetBase extends LitElement {
         --mdc-icon-size: ${fontSize3x};
       }
 
-      :host([size="small"]) {
+      :host([size='small']) {
         display: block;
         margin-left: ${size3x};
         margin-right: ${size3x};
         margin-top: ${size1x};
       }
 
-      :host([size="small"]) #knd-widget-base-wrapper {
+      :host([size='small']) #knd-widget-base-wrapper {
         font-size: ${fontSize2x};
         --mdc-icon-size: ${size5x};
 
@@ -106,31 +107,31 @@ export abstract class KndWidgetBase extends LitElement {
         width: 100%;
       }
 
-      :host([size="medium"]) #knd-widget-base-wrapper {
+      :host([size='medium']) #knd-widget-base-wrapper {
         max-height: ${size45x};
       }
 
-      :host([size="medium"]) #knd-widget-base-wrapper,
-      :host([size="large"]) #knd-widget-base-wrapper {
+      :host([size='medium']) #knd-widget-base-wrapper,
+      :host([size='large']) #knd-widget-base-wrapper {
         -ms-overflow-style: none;
         scrollbar-width: none;
         overflow-y: scroll;
         overflow-x: hidden;
       }
 
-      :host([size="medium"]) #knd-widget-base-wrapper::-webkit-scrollbar,
-      :host([size="large"]) #knd-widget-base-wrapper::-webkit-scrollbar {
+      :host([size='medium']) #knd-widget-base-wrapper::-webkit-scrollbar,
+      :host([size='large']) #knd-widget-base-wrapper::-webkit-scrollbar {
         display: none;
       }
 
-      :host([size="large"]) #knd-widget-base-wrapper {
+      :host([size='large']) #knd-widget-base-wrapper {
         display: block;
         border-radius: ${radius3x};
         height: 85%;
       }
 
-      :host([size="large"]),
-      :host([size="medium"]) {
+      :host([size='large']),
+      :host([size='medium']) {
         display: block;
       }
 
@@ -164,8 +165,8 @@ export abstract class KndWidgetBase extends LitElement {
         transform: translate(100%, 0%);
         transition-delay: 0.05s;
       }
-      :host(:not([size="medium"]):not([size="small"])) #knd-widget-expand,
-      :host(:not([size="medium"]):not([size="small"])) #knd-widget-remove {
+      :host(:not([size='medium']):not([size='small'])) #knd-widget-expand,
+      :host(:not([size='medium']):not([size='small'])) #knd-widget-remove {
         display: none;
       }
     `;
@@ -173,7 +174,7 @@ export abstract class KndWidgetBase extends LitElement {
 
   fireExpand() {
     this.dispatchEvent(
-      new CustomEvent("expand-widget", {
+      new CustomEvent('expand-widget', {
         bubbles: true,
         composed: true
       })
@@ -183,22 +184,22 @@ export abstract class KndWidgetBase extends LitElement {
   render() {
     let contents = html``;
     switch (this.size) {
-      case "tiny":
+      case 'tiny':
         contents = html`
           ${this.renderTiny()}
           <mwc-ripple primary></mwc-ripple>
         `;
         break;
-      case "small":
+      case 'small':
         contents = html`
           <knd-small>${this.renderSmall()}</knd-small>
           <mwc-ripple primary></mwc-ripple>
         `;
         break;
-      case "medium":
+      case 'medium':
         contents = this.renderMedium();
         break;
-      case "large":
+      case 'large':
         contents = this.renderLarge();
         break;
       default:
@@ -217,7 +218,7 @@ export abstract class KndWidgetBase extends LitElement {
   }
 
   fireClose(e: Event) {
-    const closeEvent = new Event("close-widget", {
+    const closeEvent = new Event('close-widget', {
       bubbles: true,
       composed: true
     });

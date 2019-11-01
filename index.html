@@ -4,33 +4,38 @@
     delete Document.prototype.adoptedStyleSheets;
   </script>
 
-  <meta name="theme-color" content="#000000">
-  <meta name="msapplication-navbutton-color" content="#000000">
-  <meta name="apple-mobile-web-app-status-bar-style" content="#000000">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#000000" />
+  <meta name="msapplication-navbutton-color" content="#000000" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="#000000" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="manifest" href="/manifest.json" />
   <!-- <link rel="icon" type="image/ico" href="/assets/img/favicon.ico?v=1"> -->
   <!-- <script src="/lib/load-sw.js"></script> -->
 
   <style>
-    html, body {
+    html,
+    body {
       margin: 0px;
       padding: 0px;
       width: 100%;
-      overflow: hidden;
     }
 
     html {
-      background-color: hsla(225deg, 6%, 13%, .6);
+      background-color: hsla(225deg, 6%, 13%, 0.6);
     }
 
     knd-app {
       --knd-theme-primary-h: 140deg;
       --knd-theme-primary-s: 77%;
       --knd-theme-primary-l: 28%;
+
+      overflow: hidden;
     }
   </style>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Barlow&display=swap">
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Barlow&display=swap"
+  />
   <script nomodule src="/lib/nomodule-check.js"></script>
   <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
   <script src="https://unpkg.com/pouchdb@7.1.1/dist/pouchdb.min.js"></script>
@@ -38,10 +43,26 @@
   <script type="module" src="/lib/components/knd-app.js"></script>
   <!--! do not remove for IE11 -->
   <script src="/lib/comment-out-ie.js"></script>
-  <script nomodule type="application/javascript" src="https://unpkg.com/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
-  <script nomodule type="application/javascript" src="https://unpkg.com/@polymer/esm-amd-loader"></script>
-  <script nomodule type="application/javascript" src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-  <script nomodule type="application/javascript" src="/fallback/components/knd-app.js"></script>
+  <script
+    nomodule
+    type="application/javascript"
+    src="https://unpkg.com/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"
+  ></script>
+  <script
+    nomodule
+    type="application/javascript"
+    src="https://unpkg.com/@polymer/esm-amd-loader"
+  ></script>
+  <script
+    nomodule
+    type="application/javascript"
+    src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"
+  ></script>
+  <script
+    nomodule
+    type="application/javascript"
+    src="/fallback/components/knd-app.js"
+  ></script>
   <!--! do not remove for IE11 -->
 </head>
 <body>
