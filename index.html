@@ -1,6 +1,11 @@
 <head>
   <title>Sector V</title>
 
+  <script src="./dev-env-vars.js"></script>
+  <script>
+    if (window.dev) delete Document.prototype.adoptedStyleSheets;
+  </script>
+
   <meta name="theme-color" content="#000000" />
   <meta name="msapplication-navbutton-color" content="#000000" />
   <meta name="apple-mobile-web-app-status-bar-style" content="#000000" />
