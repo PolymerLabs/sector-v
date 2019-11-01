@@ -1,7 +1,7 @@
-import './test-widget';
-import './knd-widget-hue';
-import './knd-calculator';
-import '@material/mwc-button';
+import "./test-widget";
+import "./knd-widget-hue";
+import "./knd-calculator";
+import "@material/mwc-button";
 import {
   LitElement,
   customElement,
@@ -10,53 +10,55 @@ import {
   property,
   query,
   TemplateResult
-} from 'lit-element';
-import { until } from 'lit-html/directives/until';
+} from "lit-element";
+import { until } from "lit-html/directives/until";
 
-import './test-widget';
-import './knd-widget-hue';
-import './knd-calculator';
+import "./test-widget";
+import "./knd-widget-hue";
+import "./knd-calculator";
 
-import { WidgetSize, WidgetDescriptor } from '../util/types';
+import { WidgetSize, WidgetDescriptor } from "../util/types";
 import {
   PouchDB,
   DB_NAME,
   WidgetsSchema,
   docNames,
   schemaToDescriptor
-} from '../util/db';
+} from "../util/db";
 
-import '@material/mwc-button';
-import '@material/mwc-fab';
-import '@material/mwc-dialog';
-import '@material/mwc-radio';
-import '@material/mwc-formfield';
+import "@material/mwc-button";
+import "@material/mwc-fab";
+import "@material/mwc-dialog";
+import "@material/mwc-radio";
+import "@material/mwc-formfield";
+import "@material/mwc-icon";
 
-import { Dialog } from '@material/mwc-dialog';
-import { Radio } from '@material/mwc-radio';
-import { size100x, fontSize1x, size1x } from '../util/base-styles';
-import { generatePseudoUid, isIdInWidgetNames } from '../util/uid';
-import { loadMaterialFonts } from '../util/font-loader';
-import { WIDGETS } from '../util/constants';
+import { Dialog } from "@material/mwc-dialog";
+import { Radio } from "@material/mwc-radio";
+import { fontSize1x, size1x } from "../util/base-styles";
+import { generatePseudoUid, isIdInWidgetNames } from "../util/uid";
+import { loadMaterialFonts } from "../util/font-loader";
+import { WIDGETS } from "../util/constants";
 
 const sizes: ReadonlySet<WidgetSize> = new Set<WidgetSize>([
-  'tiny',
-  'small',
-  'medium',
-  'large'
+  "tiny",
+  "small",
+  "medium",
+  "large"
 ]);
 function isSize(s: string): s is WidgetSize {
   return sizes.has(s as WidgetSize);
 }
-const defaultSize = 'medium';
+const defaultSize = "medium";
 
-@customElement('knd-app')
+@customElement("knd-app")
 export class KndApp extends LitElement {
-  @query('#addWidgetDialog') addWidgetDialog!: Dialog | null;
+  @query("#addWidgetDialog") addWidgetDialog!: Dialog | null;
   @query('mwc-radio[name="addWidget"][checked]')
   checkedAddWidgetRadio!: Radio | null;
   @property({ type: String }) protected size: WidgetSize = defaultSize;
   @property({ type: Boolean }) protected openAddWidgetDialog = false;
+  @property({ type: String }) protected activeWidgetId: string | null = null;
 
   protected db = new PouchDB(DB_NAME);
 
@@ -133,20 +135,39 @@ export class KndApp extends LitElement {
       }
 
       #widgetWrapper {
-        width: 100%;
+        display: grid;
+        grid-gap: 20px 20px;
+        position: relative;
+        margin: 0 auto;
+        max-width: 830px;
       }
 
-      #widgetWrapper > * {
-        max-width: ${size100x};
+      #widgetWrapper[size="medium"] {
+        grid-template-columns: repeat(2, calc(50% - 20px));
+      }
+      #widgetWrapper[size="large"] {
+        grid-template-columns: 100%;
       }
 
-      @media (min-width: 830px) {
-        #widgetWrapper[size='small'] > *,
-        #widgetWrapper[size='large'] > *,
-        #widgetWrapper[size='medium'] > * {
-          margin-left: auto;
-          margin-right: auto;
-        }
+      #widgetWrapper[size="medium"] > * {
+        z-index: 1;
+      }
+      #widgetWrapper[size="medium"] > knd-widget-hue:hover,
+      #widgetWrapper[size="medium"] > knd-widget-calculator:hover,
+      #widgetWrapper[size="medium"] > test-widget:hover {
+        z-index: 2;
+      }
+
+      #widgetWrapper[size="large"] > *[active] {
+        display: block;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        right: 20px;
+        bottom: 60px;
+      }
+      #widgetWrapper[size="large"] > * {
+        display: none;
       }
 
       knd-widget-calculator {
@@ -165,6 +186,43 @@ export class KndApp extends LitElement {
       #addWidgetDialog mwc-formfield {
         display: block;
       }
+
+      #exitWidget {
+        display: none;
+        position: fixed;
+        --mdc-icon-size: 64px;
+        color: white;
+        cursor: pointer;
+      }
+      #exitWidget[size="large"] {
+        display: block;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    `;
+  }
+
+  renderSizeButtons() {
+    return html`
+      <div id="buttons">
+        <mwc-button
+          label="tiny"
+          @click=${() => this.updateSize("tiny")}
+        ></mwc-button>
+        <mwc-button
+          label="small"
+          @click=${() => this.updateSize("small")}
+        ></mwc-button>
+        <mwc-button
+          label="medium"
+          @click=${() => this.updateSize("medium")}
+        ></mwc-button>
+        <mwc-button
+          label="large"
+          @click=${() => this.updateSize("large")}
+        ></mwc-button>
+      </div>
     `;
   }
 
@@ -185,40 +243,29 @@ export class KndApp extends LitElement {
   render() {
     loadMaterialFonts();
     const widgetsRendered = this.widgets.then(widgetDescriptors => {
-      const resultArray = widgetDescriptors.map<TemplateResult>(descriptor =>
-        descriptor.renderer(descriptor.id, this.size)
-      );
+      const resultArray = widgetDescriptors.map<TemplateResult>(descriptor => {
+        const active = descriptor.id === this.activeWidgetId;
+        return descriptor.renderer(descriptor.id, this.size, active);
+      });
       return html`
         ${resultArray}
       `;
     });
     return html`
-      <div id="buttons">
-        <mwc-button
-          label="tiny"
-          @click=${() => this.updateSize('tiny')}
-        ></mwc-button>
-        <mwc-button
-          label="small"
-          @click=${() => this.updateSize('small')}
-        ></mwc-button>
-        <mwc-button
-          label="medium"
-          @click=${() => this.updateSize('medium')}
-        ></mwc-button>
-        <mwc-button
-          label="large"
-          @click=${() => this.updateSize('large')}
-        ></mwc-button>
-      </div>
+      <!-- For debuggin' -->
+      <!-- ${this.renderSizeButtons()} -->
 
       <div
         id="widgetWrapper"
         size=${this.size}
         @close-widget=${this.onCloseWidget}
+        @expand-widget=${this.onExpandWidget}
       >
         ${until(widgetsRendered)}
       </div>
+      <mwc-icon id="exitWidget" size=${this.size} @click=${this.onExitWidget}>
+        keyboard_arrow_up
+      </mwc-icon>
       <mwc-fab icon="add" @click=${this.onAddWidgetClick}></mwc-fab>
       <mwc-dialog
         id="addWidgetDialog"
@@ -249,27 +296,52 @@ export class KndApp extends LitElement {
     `;
   }
 
+  onExitWidget() {
+    this.updateSize("medium");
+    this.onWindowResize();
+  }
+
   private readonly onHashChange = () => {
-    console.log('hash changed');
+    console.log("hash changed");
     const hash = window.location.hash.slice(1);
     if (isSize(hash)) {
       this.size = hash;
-    } else if (hash === '') {
+    } else if (hash === "") {
       this.size = defaultSize;
     }
   };
 
+  private readonly onWindowResize = () => {
+    if (this.size === "large") {
+      return;
+    }
+    this.size = window.innerWidth < 600 ? "small" : "medium";
+  };
+
   connectedCallback() {
     super.connectedCallback();
-    window.addEventListener('hashchange', this.onHashChange);
-    window.addEventListener('popstate', this.onHashChange);
+    window.addEventListener("hashchange", this.onHashChange);
+    window.addEventListener("popstate", this.onHashChange);
+    window.addEventListener("resize", this.onWindowResize);
     this.onHashChange();
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    window.removeEventListener('hashchange', this.onHashChange);
-    window.removeEventListener('popstate', this.onHashChange);
+    window.removeEventListener("hashchange", this.onHashChange);
+    window.removeEventListener("popstate", this.onHashChange);
+    window.removeEventListener("resize", this.onWindowResize);
+  }
+
+  async onExpandWidget(e: Event) {
+    if (!(e.target instanceof HTMLElement)) {
+      return;
+    }
+
+    const id = e.target.getAttribute("widgetId");
+
+    this.activeWidgetId = id;
+    this.updateSize("large");
   }
 
   async onCloseWidget(e: Event) {
@@ -277,7 +349,7 @@ export class KndApp extends LitElement {
       return;
     }
 
-    const id = e.target.getAttribute('widgetId');
+    const id = e.target.getAttribute("widgetId");
 
     await this.db.upsert<WidgetsSchema>(docNames.WIDGETS, docPart => {
       const doc = docPart as WidgetsSchema;
@@ -305,7 +377,7 @@ export class KndApp extends LitElement {
   protected onAddDialogClose(e: CustomEvent<{ action: string }>) {
     this.openAddWidgetDialog = false;
     const action = e.detail.action;
-    if (action !== 'add') {
+    if (action !== "add") {
       return;
     }
 

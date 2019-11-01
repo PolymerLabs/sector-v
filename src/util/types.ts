@@ -18,5 +18,6 @@ export interface WidgetDescriptor {
 
 export type WidgetRenderer = (
   widgetId: string,
-  size: WidgetSize
+  size: WidgetSize,
+  active: boolean
 ) => TemplateResult;

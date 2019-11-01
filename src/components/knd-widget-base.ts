@@ -1,11 +1,29 @@
-import { LitElement, property, TemplateResult, html, css, CSSResult } from 'lit-element';
-import { WidgetSize } from '../util/types';
+import {
+  LitElement,
+  property,
+  TemplateResult,
+  html,
+  css,
+  CSSResult
+} from "lit-element";
+import { WidgetSize } from "../util/types";
 
-import './knd-small';
+import "./knd-small";
 
-import '@material/mwc-ripple';
-import '@material/mwc-fab';
-import { size3x, size1x, radius1x, size2x, size10x, fontSize3x, fontSize2x, size5x, size45x, radius3x } from '../util/base-styles';
+import "@material/mwc-ripple";
+import "@material/mwc-fab";
+import {
+  size3x,
+  size1x,
+  radius1x,
+  size2x,
+  size10x,
+  fontSize3x,
+  fontSize2x,
+  size5x,
+  size45x,
+  radius3x
+} from "../util/base-styles";
 
 /**
  * @fires close-widget
@@ -15,11 +33,11 @@ export abstract class KndWidgetBase extends LitElement {
   @property({
     type: String,
     reflect: true,
-    attribute: 'size'
+    attribute: "size"
   })
-  size: WidgetSize = 'small';
+  size: WidgetSize = "small";
 
-  static get styles(): CSSResult|CSSResult[] {
+  static get styles(): CSSResult | CSSResult[] {
     return css`
       :host {
         position: relative;
@@ -121,22 +139,22 @@ export abstract class KndWidgetBase extends LitElement {
         z-index: 2;
       }
 
-      #knd-widget-expand, #knd-widget-remove {
+      #knd-widget-expand,
+      #knd-widget-remove {
         position: absolute;
         top: 0px;
         right: 0px;
         transition: transform ease-out 0.2s;
         padding: ${size1x};
         z-index: 1;
+        transform: translate(0%, 0%);
       }
       #knd-widget-expand {
-        transform: translate(0%, 100%);
-        --mdc-theme-secondary: #0091EA;
+        --mdc-theme-secondary: #0091ea;
         --mdc-theme-on-secondary: white;
       }
       #knd-widget-remove {
-        transform: translate(0%, 0%);
-        --mdc-theme-secondary: #D50000;
+        --mdc-theme-secondary: #d50000;
         --mdc-theme-on-secondary: white;
       }
       :host(:hover) #knd-widget-expand {
@@ -146,30 +164,41 @@ export abstract class KndWidgetBase extends LitElement {
         transform: translate(100%, 0%);
         transition-delay: 0.05s;
       }
-      :host(:not([size="medium"])) #knd-widget-expand,
+      :host(:not([size="medium"]):not([size="small"])) #knd-widget-expand,
       :host(:not([size="medium"]):not([size="small"])) #knd-widget-remove {
         display: none;
       }
     `;
   }
 
+  fireExpand() {
+    this.dispatchEvent(
+      new CustomEvent("expand-widget", {
+        bubbles: true,
+        composed: true
+      })
+    );
+  }
+
   render() {
     let contents = html``;
     switch (this.size) {
-      case 'tiny':
+      case "tiny":
         contents = html`
           ${this.renderTiny()}
-          <mwc-ripple primary></mwc-ripple>`;
+          <mwc-ripple primary></mwc-ripple>
+        `;
         break;
-      case 'small':
+      case "small":
         contents = html`
           <knd-small>${this.renderSmall()}</knd-small>
-          <mwc-ripple primary></mwc-ripple>`;
+          <mwc-ripple primary></mwc-ripple>
+        `;
         break;
-      case 'medium':
+      case "medium":
         contents = this.renderMedium();
         break;
-      case 'large':
+      case "large":
         contents = this.renderLarge();
         break;
       default:
@@ -178,14 +207,20 @@ export abstract class KndWidgetBase extends LitElement {
 
     return html`
       <div id="knd-widget-base-wrapper">${contents}</div>
-      <div id="knd-widget-expand"><mwc-fab mini icon="fullscreen"></mwc-fab></div>
+      <div id="knd-widget-expand">
+        <mwc-fab mini icon="fullscreen" @click=${this.fireExpand}></mwc-fab>
+      </div>
       <div id="knd-widget-remove">
         <mwc-fab mini icon="clear" @click=${this.fireClose}></mwc-fab>
-      </div>`;
+      </div>
+    `;
   }
 
   fireClose(e: Event) {
-    const closeEvent = new Event('close-widget', {bubbles: true, composed: true});
+    const closeEvent = new Event("close-widget", {
+      bubbles: true,
+      composed: true
+    });
     if (e.target) {
       e.target.dispatchEvent(closeEvent);
     }
@@ -195,6 +230,6 @@ export abstract class KndWidgetBase extends LitElement {
   protected abstract renderSmall(): TemplateResult;
   protected abstract renderMedium(): TemplateResult;
   protected abstract renderLarge(): TemplateResult;
-};
+}
 
 const neverReached = (never: never) => never;
