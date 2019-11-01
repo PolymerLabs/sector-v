@@ -1,14 +1,15 @@
-import {LitElement, customElement, html, css, property} from 'lit-element';
-
 import './test-widget';
 import './knd-widget-hue';
 import './knd-calculator';
-import { WidgetSize } from '../util/types';
-
 import '@material/mwc-button';
-import { size100x, fontSize1x } from '../util/base-styles';
 
-const sizes: ReadonlySet<WidgetSize> = new Set<WidgetSize>(['tiny', 'small', 'medium', 'large']);
+import {css, customElement, html, LitElement, property} from 'lit-element';
+
+import {fontSize1x, size100x} from '../util/base-styles';
+import {WidgetSize} from '../util/types';
+
+const sizes: ReadonlySet<WidgetSize> =
+    new Set<WidgetSize>(['tiny', 'small', 'medium', 'large']);
 function isSize(s: string): s is WidgetSize {
   return sizes.has(s as WidgetSize);
 }
@@ -64,6 +65,12 @@ export class KndApp extends LitElement {
           margin-right: auto;
         }
       }
+
+      knd-widget-calculator {
+        --knd-theme-surface: #8d6e63;
+        --mdc-theme-primary: #ffffff;
+        color: #ffffff;
+      }
     `;
   }
 
@@ -82,10 +89,14 @@ export class KndApp extends LitElement {
   render() {
     return html`
       <div id="buttons">
-        <mwc-button label="tiny" @click=${() => this.updateSize('tiny')}></mwc-button>
-        <mwc-button label="small" @click=${() => this.updateSize('small')}></mwc-button>
-        <mwc-button label="medium" @click=${() => this.updateSize('medium')}></mwc-button>
-        <mwc-button label="large" @click=${() => this.updateSize('large')}></mwc-button>
+        <mwc-button label="tiny" @click=${
+        () => this.updateSize('tiny')}></mwc-button>
+        <mwc-button label="small" @click=${
+        () => this.updateSize('small')}></mwc-button>
+        <mwc-button label="medium" @click=${
+        () => this.updateSize('medium')}></mwc-button>
+        <mwc-button label="large" @click=${
+        () => this.updateSize('large')}></mwc-button>
       </div>
 
       <div id="widgetWrapper" size=${this.size}>
@@ -107,6 +118,7 @@ export class KndApp extends LitElement {
       this.size = defaultSize;
     }
   };
+
   connectedCallback() {
     super.connectedCallback();
     window.addEventListener('hashchange', this.onHashChange);
