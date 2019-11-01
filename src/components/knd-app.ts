@@ -30,7 +30,8 @@ import { WidgetDescriptor, WidgetSize } from '../util/types';
 import { generatePseudoUid, isIdInWidgetNames } from '../util/uid';
 import './knd-calculator';
 import './knd-widget-hue';
-import './test-widget';
+import './knd-widget-checklist';
+import { KndWidgetBase } from './knd-widget-base';
 
 const sizes: ReadonlySet<WidgetSize> = new Set<WidgetSize>([
   'tiny',
@@ -95,7 +96,7 @@ export class KndApp extends LitElement {
       }
     });
 
-    return widgetDoc ? schemaToDescriptor(widgetDoc) : [];
+    return widgetDoc ? schemaToDescriptor(widgetDoc, this.db) : [];
   })();
 
   static get styles() {
@@ -169,7 +170,7 @@ export class KndApp extends LitElement {
       }
       :host([size='medium']) #widgetWrapper > knd-widget-hue:hover,
       :host([size='medium']) #widgetWrapper > knd-widget-calculator:hover,
-      :host([size='medium']) #widgetWrapper > test-widget:hover {
+      :host([size='medium']) #widgetWrapper > knd-widget-checklist:hover {
         z-index: 2;
       }
 
@@ -260,7 +261,14 @@ export class KndApp extends LitElement {
     const widgetsRendered = this.widgets.then(widgetDescriptors => {
       const resultArray = widgetDescriptors.map<TemplateResult>(descriptor => {
         const active = descriptor.id === this.activeWidgetId;
-        return descriptor.renderer(descriptor.id, this.size, active);
+        const offlineDoc = descriptor.offlineDoc;
+
+        return descriptor.renderer(
+          descriptor.id,
+          this.size,
+          active,
+          offlineDoc
+        );
       });
       return html`
         ${resultArray}
@@ -273,6 +281,7 @@ export class KndApp extends LitElement {
           id="widgetWrapper"
           @close-widget=${this.onCloseWidget}
           @expand-widget=${this.onExpandWidget}
+          @update-doc=${this.onUpdateDoc}
         >
           ${until(widgetsRendered)}
         </div>
@@ -385,7 +394,7 @@ export class KndApp extends LitElement {
         return name.id !== id;
       });
 
-      this.widgets = schemaToDescriptor(doc);
+      this.widgets = schemaToDescriptor(doc, this.db);
 
       return doc;
     });
@@ -429,9 +438,24 @@ export class KndApp extends LitElement {
       }
 
       doc.names.push({ name: tagName, id: uid });
-      this.widgets = schemaToDescriptor(doc);
+      this.widgets = schemaToDescriptor(doc, this.db);
 
       return doc;
     });
+  }
+
+  protected async onUpdateDoc(e: CustomEvent) {
+    const target = e.target as null | KndWidgetBase;
+    if (!target) {
+      return;
+    }
+
+    const id = target.getAttribute('widgetId');
+
+    if (!id) {
+      return;
+    }
+
+    this.db.upsert(id, _ => e.detail.doc);
   }
 }

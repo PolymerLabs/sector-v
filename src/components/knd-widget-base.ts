@@ -36,6 +36,8 @@ export abstract class KndWidgetBase extends LitElement {
   })
   size: WidgetSize = 'small';
 
+  @property({ type: Object }) offlineDoc = {};
+
   static get styles(): CSSResult | CSSResult[] {
     return css`
       :host {
@@ -125,7 +127,7 @@ export abstract class KndWidgetBase extends LitElement {
       :host([size='large']) #knd-widget-base-wrapper {
         display: block;
         border-radius: ${radius3x};
-        max-height: 70vh;
+        max-height: 80vh;
       }
 
       :host([size='large']) {

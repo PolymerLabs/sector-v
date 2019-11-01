@@ -17,6 +17,11 @@ export interface WidgetsSchema {
   active: string | null;
 }
 
+export interface ChecklistSchema {
+  checked: string[];
+  unchecked: string[];
+}
+
 export interface DBSchema {
   widgets: WidgetsSchema;
 }
@@ -35,7 +40,8 @@ const getRenderer = (name: string): null | WidgetRenderer => {
 };
 
 export const schemaToDescriptor = async (
-  doc: WidgetsSchema
+  doc: WidgetsSchema,
+  db: PouchDB.Database
 ): Promise<WidgetDescriptor[]> => {
   const widgets: WidgetDescriptor[] = [];
   for (let widgetName of doc.names) {
@@ -45,9 +51,18 @@ export const schemaToDescriptor = async (
       continue;
     }
 
+    let offlineDoc = {};
+
+    try {
+      offlineDoc = await db.get(widgetName.id);
+    } catch (e) {
+      offlineDoc = {};
+    }
+
     const descriptor: WidgetDescriptor = {
       id: widgetName.id,
-      renderer
+      renderer,
+      offlineDoc
     };
 
     widgets.push(descriptor);
