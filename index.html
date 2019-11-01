@@ -1,68 +1,90 @@
-<head>
-  <title>Sector V</title>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Sector V</title>
 
-  <script src="./dev-env-vars.js"></script>
-  <script>
-    if (window.dev) delete Document.prototype.adoptedStyleSheets;
-  </script>
+    <script src="./dev-env-vars.js"></script>
+    <script>
+      if (window.dev) delete Document.prototype.adoptedStyleSheets;
+    </script>
+    <meta
+      name="Description"
+      content="Your own technological treehouse on the web!"
+    />
+    <meta name="theme-color" content="#000000" />
+    <meta name="msapplication-navbutton-color" content="#000000" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="#000000" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="manifest" href="/manifest.json" />
+    <!-- icon in the highest resolution we need it for -->
+    <link rel="icon" sizes="512x512" href="assets/images/iconx512.png" />
+    <!-- reuse same icon for Safari -->
+    <link rel="apple-touch-icon" href="assets/images/iconx192.png" />
+    <!-- multiple icons for IE -->
+    <meta
+      name="msapplication-square70x70logo"
+      content="assets/images/iconsx070.png"
+    />
+    <meta
+      name="msapplication-square150x150logo"
+      content="assets/images/iconsx150.png"
+    />
+    <meta
+      name="msapplication-wide310x310logo"
+      content="assets/images/iconsx310.png"
+    />
+    <script src="/lib/load-sw.js"></script>
 
-  <meta name="theme-color" content="#000000" />
-  <meta name="msapplication-navbutton-color" content="#000000" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="#000000" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="manifest" href="/manifest.json" />
-  <!-- <link rel="icon" type="image/ico" href="/assets/img/favicon.ico?v=1"> -->
-  <script src="/lib/load-sw.js"></script>
+    <style>
+      html,
+      body {
+        margin: 0px;
+        padding: 0px;
+        width: 100%;
+      }
 
-  <style>
-    html,
-    body {
-      margin: 0px;
-      padding: 0px;
-      width: 100%;
-    }
+      html {
+        background-color: hsla(225deg, 6%, 13%, 0.6);
+      }
 
-    html {
-      background-color: hsla(225deg, 6%, 13%, 0.6);
-    }
+      knd-app {
+        --knd-theme-primary-h: 140deg;
+        --knd-theme-primary-s: 77%;
+        --knd-theme-primary-l: 28%;
 
-    knd-app {
-      --knd-theme-primary-h: 140deg;
-      --knd-theme-primary-s: 77%;
-      --knd-theme-primary-l: 28%;
+        overflow: hidden;
+      }
+    </style>
+    <link rel="stylesheet" href="/external_libs/barlow.css" />
+    <script nomodule src="/lib/nomodule-check.js"></script>
+    <script src="/external_libs/webcomponents-loader.js"></script>
+    <script src="/external_libs/pouchdb.min.js"></script>
+    <script src="/external_libs/pouchdb.upsert.min.js"></script>
+    <script type="module" src="/lib/components/knd-app.js"></script>
+    <!--! do not remove for IE11 -->
+    <script src="/lib/comment-out-ie.js"></script>
+    <script
+      nomodule
+      type="application/javascript"
+      src="/external_libs/custom-elements-es5-adapter.js"
+    ></script>
+    <script
+      nomodule
+      type="application/javascript"
+      src="/external_libs/esm-amd-loader.min.js"
+    ></script>
+    <script
+      nomodule
+      type="application/javascript"
+      src="/fallback/components/knd-app.js"
+    ></script>
+    <!--! do not remove for IE11 -->
+  </head>
+  <body>
+    <noscript>
+      Sorry, but this page won't work without javascript rn :(
+    </noscript>
 
-      overflow: hidden;
-    }
-  </style>
-  <link rel="stylesheet" href="/external_libs/barlow.css" />
-  <script nomodule src="/lib/nomodule-check.js"></script>
-  <script src="/external_libs/webcomponents-loader.js"></script>
-  <script src="/external_libs/pouchdb.min.js"></script>
-  <script src="/external_libs/pouchdb.upsert.min.js"></script>
-  <script type="module" src="/lib/components/knd-app.js"></script>
-  <!--! do not remove for IE11 -->
-  <script src="/lib/comment-out-ie.js"></script>
-  <script
-    nomodule
-    type="application/javascript"
-    src="/external_libs/custom-elements-es5-adapter.js"
-  ></script>
-  <script
-    nomodule
-    type="application/javascript"
-    src="/external_libs/esm-amd-loader.min.js"
-  ></script>
-  <script
-    nomodule
-    type="application/javascript"
-    src="/fallback/components/knd-app.js"
-  ></script>
-  <!--! do not remove for IE11 -->
-</head>
-<body>
-  <noscript>
-    Sorry, but this page won't work without javascript rn :(
-  </noscript>
-
-  <knd-app></knd-app>
-</body>
+    <knd-app></knd-app>
+  </body>
+</html>

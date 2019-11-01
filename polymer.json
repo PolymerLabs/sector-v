@@ -35,7 +35,7 @@
     }
   ],
   "sources": ["assets/**/**", "lib/*.js", "external_libs/*"],
-  "extraDependencies": ["manifest.json"],
+  "extraDependencies": ["manifest.json", "robots.txt"],
   "lint": {
     "rules": ["polymer-3"]
   }
