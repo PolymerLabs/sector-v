@@ -1,4 +1,4 @@
-  {
+{
   "compilerOptions": {
     "target": "es2017",
     "module": "es2015",
@@ -27,11 +27,9 @@
           "no-unknown-event": "warning"
         }
       }
-    ]
+    ],
+    "allowSyntheticDefaultImports": true
   },
-  "include": [
-    "custom_typings/**/*.ts",
-    "src/**/*.ts"
-  ],
+  "include": ["custom_typings/**/*.ts", "src/**/*.ts"],
   "exclude": []
 }
