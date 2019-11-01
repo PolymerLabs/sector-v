@@ -1,0 +1,29 @@
+[debug] [2019-11-01T08:31:06.651Z] ----------------------------------------------------------------------
+[debug] [2019-11-01T08:31:06.653Z] Command:       /Users/emarquez/.nvm/versions/node/v11.12.0/bin/node /Users/emarquez/.nvm/versions/node/v11.12.0/bin/firebase serve
+[debug] [2019-11-01T08:31:06.654Z] CLI Version:   7.6.2
+[debug] [2019-11-01T08:31:06.654Z] Platform:      darwin
+[debug] [2019-11-01T08:31:06.654Z] Node Version:  v11.12.0
+[debug] [2019-11-01T08:31:06.655Z] Time:          Fri Nov 01 2019 01:31:06 GMT-0700 (Pacific Daylight Time)
+[debug] [2019-11-01T08:31:06.655Z] ----------------------------------------------------------------------
+[debug] [2019-11-01T08:31:06.655Z] 
+[debug] [2019-11-01T08:31:06.666Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-11-01T08:31:06.666Z] > authorizing via signed-in user
+[debug] [2019-11-01T08:31:06.667Z] [iam] checking project sector-v-a531a for permissions ["firebase.projects.get"]
+[debug] [2019-11-01T08:31:06.668Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-11-01T08:31:06.669Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2019-11-01T08:31:06.891Z] <<< HTTP RESPONSE 200
+[debug] [2019-11-01T08:31:06.913Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/sector-v-a531a:testIamPermissions  
+
+[debug] [2019-11-01T08:31:07.078Z] <<< HTTP RESPONSE 200
+[debug] [2019-11-01T08:31:07.079Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/sector-v-a531a  
+ 
+[debug] [2019-11-01T08:31:07.299Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from '/Users/emarquez/Workspace/polymer/SectorV'...
+[info] 
+[debug] [2019-11-01T08:31:07.302Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/sector-v-a531a/webApps/-/config  
+ 
+[debug] [2019-11-01T08:31:07.559Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: build/default
+[info] ✔  hosting: Local server: http://localhost:5000
