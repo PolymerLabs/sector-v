@@ -165,8 +165,8 @@ export abstract class KndWidgetBase extends LitElement {
         transform: translate(100%, 0%);
         transition-delay: 0.05s;
       }
-      :host(:not([size='medium']):not([size='small'])) #knd-widget-expand,
-      :host(:not([size='medium']):not([size='small'])) #knd-widget-remove {
+      :host(:not([size='medium'])) #knd-widget-expand,
+      :host(:not([size='medium'])) #knd-widget-remove {
         display: none;
       }
     `;
@@ -192,7 +192,9 @@ export abstract class KndWidgetBase extends LitElement {
         break;
       case 'small':
         contents = html`
-          <knd-small>${this.renderSmall()}</knd-small>
+          <knd-small @click=${this.fireExpand} @remove-click=${this.fireClose}>
+            ${this.renderSmall()}
+          </knd-small>
           <mwc-ripple primary></mwc-ripple>
         `;
         break;
@@ -222,6 +224,7 @@ export abstract class KndWidgetBase extends LitElement {
       bubbles: true,
       composed: true
     });
+
     if (e.target) {
       e.target.dispatchEvent(closeEvent);
     }
