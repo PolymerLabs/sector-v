@@ -4,8 +4,7 @@
   "start_url": "/",
   "display": "standalone",
   "default_locale": "en",
-  "background_color": "#FFFFFF",
-  "theme_color": "#000000",
-  "icons": [
-  ]
+  "background_color": "hsla(225deg, 6%, 13%, 0.6)",
+  "theme_color": "black",
+  "icons": []
 }

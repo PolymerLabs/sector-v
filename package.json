@@ -12,7 +12,7 @@
     "dev": "polyserve --npm",
     "dev:prod": "firebase serve",
     "prepare": "npm run build:all",
-    "deploy": "firebase deploy"
+    "deploy": "npm run prepare && firebase deploy"
   },
   "repository": {
     "type": "git",
