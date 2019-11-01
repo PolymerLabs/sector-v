@@ -7,9 +7,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "build:prod": "polymer build",
+    "build:all": "npm run build && npm run build:prod",
     "watch": "tsc --watch",
     "dev": "polyserve --npm",
-    "dev:prod": "firebase serve"
+    "dev:prod": "firebase serve",
+    "prepare": "npm run build:all",
+    "deploy": "firebase deploy"
   },
   "repository": {
     "type": "git",
