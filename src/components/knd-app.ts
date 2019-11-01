@@ -335,6 +335,8 @@ export class KndApp extends LitElement {
     } else if (hash === '') {
       this.size = defaultSize;
     }
+
+    this.onWindowResize();
   };
 
   private readonly onWindowResize = () => {
