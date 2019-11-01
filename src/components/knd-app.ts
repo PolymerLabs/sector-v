@@ -2,14 +2,48 @@ import './test-widget';
 import './knd-widget-hue';
 import './knd-calculator';
 import '@material/mwc-button';
+import {
+  LitElement,
+  customElement,
+  html,
+  css,
+  property,
+  query,
+  TemplateResult
+} from 'lit-element';
+import { until } from 'lit-html/directives/until';
 
-import {css, customElement, html, LitElement, property} from 'lit-element';
+import './test-widget';
+import './knd-widget-hue';
+import './knd-calculator';
 
-import {fontSize1x, size100x} from '../util/base-styles';
-import {WidgetSize} from '../util/types';
+import { WidgetSize, WidgetDescriptor } from '../util/types';
+import {
+  PouchDB,
+  DB_NAME,
+  WidgetsSchema,
+  docNames,
+  schemaToDescriptor
+} from '../util/db';
 
-const sizes: ReadonlySet<WidgetSize> =
-    new Set<WidgetSize>(['tiny', 'small', 'medium', 'large']);
+import '@material/mwc-button';
+import '@material/mwc-fab';
+import '@material/mwc-dialog';
+import '@material/mwc-radio';
+import '@material/mwc-formfield';
+
+import { Dialog } from '@material/mwc-dialog';
+import { Radio } from '@material/mwc-radio';
+import { size100x, fontSize1x, size1x } from '../util/base-styles';
+import { generatePseudoUid, isIdInWidgetNames } from '../util/uid';
+import { loadMaterialFonts } from '../util/font-loader';
+
+const sizes: ReadonlySet<WidgetSize> = new Set<WidgetSize>([
+  'tiny',
+  'small',
+  'medium',
+  'large'
+]);
 function isSize(s: string): s is WidgetSize {
   return sizes.has(s as WidgetSize);
 }
@@ -17,7 +51,37 @@ const defaultSize = 'medium';
 
 @customElement('knd-app')
 export class KndApp extends LitElement {
-  @property({type: String}) protected size: WidgetSize = defaultSize;
+  @query('#addWidgetDialog') addWidgetDialog!: Dialog | null;
+  @query('mwc-radio[name="addWidget"][checked]')
+  checkedAddWidgetRadio!: Radio | null;
+  @property({ type: String }) protected size: WidgetSize = defaultSize;
+  @property({ type: Boolean }) protected openAddWidgetDialog = false;
+
+  protected db = new PouchDB(DB_NAME);
+
+  @property({ type: Object }) protected widgets: Promise<
+    WidgetDescriptor[]
+  > = (async () => {
+    const db = this.db;
+
+    if (!db) {
+      return [];
+    }
+
+    let widgetDoc: WidgetsSchema | null = null;
+
+    await db.upsert<WidgetsSchema>(docNames.WIDGETS, doc => {
+      if (doc.names) {
+        widgetDoc = doc as WidgetsSchema;
+        return false;
+      } else {
+        widgetDoc = { names: [] };
+        return widgetDoc;
+      }
+    });
+
+    return widgetDoc ? schemaToDescriptor(widgetDoc) : [];
+  })();
 
   static get styles() {
     return css`
@@ -25,22 +89,38 @@ export class KndApp extends LitElement {
         display: block;
         width: 100%;
         --mdc-icon-font: Material Icons Outlined;
-        --knd-theme-primary: hsl(var(--knd-theme-primary-h), var(--knd-theme-primary-s), var(--knd-theme-primary-l));
+        --knd-theme-primary: hsl(
+          var(--knd-theme-primary-h),
+          var(--knd-theme-primary-s),
+          var(--knd-theme-primary-l)
+        );
         --mdc-theme-primary: var(--knd-theme-primary);
 
-        --knd-theme-surface: hsl(calc(var(--knd-theme-primary-h) - 4deg), calc(var(--knd-theme-primary-s) - 33%), calc(var(--knd-theme-primary-l) + 67%));
+        --knd-theme-surface: hsl(
+          calc(var(--knd-theme-primary-h) - 4deg),
+          calc(var(--knd-theme-primary-s) - 33%),
+          calc(var(--knd-theme-primary-l) + 67%)
+        );
         --mdc-theme-surface: var(--knd-theme-surface);
 
         --knd-theme-on-surface-h: calc(var(--knd-theme-primary-h) - 2deg);
         --knd-theme-on-surface-s: calc(var(--knd-theme-primary-s) - 59%);
         --knd-theme-on-surface-l: calc(var(--knd-theme-primary-l) + 42%);
-        --knd-theme-on-surface: hsl(var(--knd-theme-primary-h), var(--knd-theme-primary-s), var(--knd-theme-primary-l));
+        --knd-theme-on-surface: hsl(
+          var(--knd-theme-primary-h),
+          var(--knd-theme-primary-s),
+          var(--knd-theme-primary-l)
+        );
         --mdc-theme-on-surface: var(--knd-theme-on-surface);
 
         --knd-theme-secondary-h: 31deg;
         --knd-theme-secondary-s: 100%;
         --knd-theme-secondary-l: 45%;
-        --knd-theme-secondary: hsl(var(--knd-theme-secondary-h), var(--knd-theme-secondary-s), var(--knd-theme-secondary-l));
+        --knd-theme-secondary: hsl(
+          var(--knd-theme-secondary-h),
+          var(--knd-theme-secondary-s),
+          var(--knd-theme-secondary-l)
+        );
         --mdc-theme-secondary: var(--knd-theme-secondary);
 
         font-family: Barlow, sans-serif;
@@ -60,8 +140,9 @@ export class KndApp extends LitElement {
       }
 
       @media (min-width: 830px) {
-        #widgetWrapper[size="large"] > *,
-        #widgetWrapper[size="medium"] > * {
+        #widgetWrapper[size='small'] > *,
+        #widgetWrapper[size='large'] > *,
+        #widgetWrapper[size='medium'] > * {
           margin-left: auto;
           margin-right: auto;
         }
@@ -72,6 +153,17 @@ export class KndApp extends LitElement {
         --mdc-theme-primary: #ffffff;
         color: #ffffff;
       }
+
+      mwc-fab {
+        position: fixed;
+        bottom: ${size1x};
+        right: ${size1x};
+        z-index: 10;
+      }
+
+      #addWidgetDialog mwc-formfield {
+        display: block;
+      }
     `;
   }
 
@@ -80,33 +172,81 @@ export class KndApp extends LitElement {
     if (size === defaultSize) {
       // We want no hash at all. This is the only way lol.
       history.pushState(
-          null, document.title,
-          window.location.pathname + window.location.search);
+        null,
+        document.title,
+        window.location.pathname + window.location.search
+      );
     } else {
       window.location.hash = size;
     }
   }
 
   render() {
+    loadMaterialFonts();
+    const widgetsRendered = this.widgets.then(widgetDescriptors => {
+      const resultArray = widgetDescriptors.map<TemplateResult>(descriptor =>
+        descriptor.renderer(descriptor.id, this.size)
+      );
+      return html`
+        ${resultArray}
+      `;
+    });
     return html`
       <div id="buttons">
-        <mwc-button label="tiny" @click=${
-        () => this.updateSize('tiny')}></mwc-button>
-        <mwc-button label="small" @click=${
-        () => this.updateSize('small')}></mwc-button>
-        <mwc-button label="medium" @click=${
-        () => this.updateSize('medium')}></mwc-button>
-        <mwc-button label="large" @click=${
-        () => this.updateSize('large')}></mwc-button>
+        <mwc-button
+          label="tiny"
+          @click=${() => this.updateSize('tiny')}
+        ></mwc-button>
+        <mwc-button
+          label="small"
+          @click=${() => this.updateSize('small')}
+        ></mwc-button>
+        <mwc-button
+          label="medium"
+          @click=${() => this.updateSize('medium')}
+        ></mwc-button>
+        <mwc-button
+          label="large"
+          @click=${() => this.updateSize('large')}
+        ></mwc-button>
       </div>
 
-      <div id="widgetWrapper" size=${this.size}>
-        <knd-widget-hue size=${this.size}></knd-widget-hue>
-        <knd-widget-calculator size=${this.size}></knd-widget-calculator>
-        <test-widget size=${this.size}></test-widget>
-        <test-widget size=${this.size}></test-widget>
+      <div
+        id="widgetWrapper"
+        size=${this.size}
+        @close-widget=${this.onCloseWidget}
+      >
+        ${until(widgetsRendered)}
       </div>
-
+      <mwc-fab icon="add" @click=${this.onAddWidgetClick}></mwc-fab>
+      <mwc-dialog
+        id="addWidgetDialog"
+        ?open=${this.openAddWidgetDialog}
+        @closed=${this.onAddDialogClose}
+        title="Add a widget!"
+      >
+        <mwc-formfield label="Calculon">
+          <mwc-radio
+            name="addWidget"
+            value="knd-widget-calculator"
+            dialogInitialFocus
+            checked
+          >
+          </mwc-radio>
+        </mwc-formfield>
+        <mwc-formfield label="Huey">
+          <mwc-radio name="addWidget" value="knd-widget-hue"></mwc-radio>
+        </mwc-formfield>
+        <mwc-formfield label="Todo">
+          <mwc-radio name="addWidget" value="test-widget"></mwc-radio>
+        </mwc-formfield>
+        <mwc-button slot="primaryAction" dialogAction="add">
+          add
+        </mwc-button>
+        <mwc-button slot="secondaryAction" dialogAction="cancel">
+          cancel
+        </mwc-button>
+      </mwc-dialog>
     `;
   }
 
@@ -131,5 +271,69 @@ export class KndApp extends LitElement {
     super.disconnectedCallback();
     window.removeEventListener('hashchange', this.onHashChange);
     window.removeEventListener('popstate', this.onHashChange);
+  }
+
+  async onCloseWidget(e: Event) {
+    if (!(e.target instanceof HTMLElement)) {
+      return;
+    }
+
+    const id = e.target.getAttribute('widgetId');
+
+    await this.db.upsert<WidgetsSchema>(docNames.WIDGETS, docPart => {
+      const doc = docPart as WidgetsSchema;
+
+      doc.names = doc.names.filter(name => {
+        return name.id !== id;
+      });
+
+      this.widgets = schemaToDescriptor(doc);
+
+      return doc;
+    });
+  }
+
+  async onAddWidgetClick() {
+    const dialog = this.addWidgetDialog;
+
+    if (!dialog) {
+      return;
+    }
+
+    this.openAddWidgetDialog = true;
+  }
+
+  protected onAddDialogClose(e: CustomEvent<{ action: string }>) {
+    this.openAddWidgetDialog = false;
+    const action = e.detail.action;
+    if (action !== 'add') {
+      return;
+    }
+
+    const radio = this.checkedAddWidgetRadio;
+
+    if (!radio) {
+      return;
+    }
+
+    const tagName = radio.value;
+
+    this.addWidget(tagName);
+  }
+
+  protected addWidget(tagName: string) {
+    this.db.upsert<WidgetsSchema>(docNames.WIDGETS, docPart => {
+      const doc = docPart as WidgetsSchema;
+      let uid = generatePseudoUid();
+
+      while (isIdInWidgetNames(doc.names, uid)) {
+        uid = generatePseudoUid();
+      }
+
+      doc.names.push({ name: tagName, id: uid });
+      this.widgets = schemaToDescriptor(doc);
+
+      return doc;
+    });
   }
 }

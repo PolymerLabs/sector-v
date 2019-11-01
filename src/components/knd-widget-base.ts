@@ -7,6 +7,10 @@ import '@material/mwc-ripple';
 import '@material/mwc-fab';
 import { size3x, size1x, radius1x, size2x, size10x, fontSize3x, fontSize2x, size5x, size45x, radius3x } from '../util/base-styles';
 
+/**
+ * @fires close-widget
+ * @fires update-doc
+ */
 export abstract class KndWidgetBase extends LitElement {
   @property({
     type: String,
@@ -126,24 +130,24 @@ export abstract class KndWidgetBase extends LitElement {
         z-index: 1;
       }
       #knd-widget-expand {
-        transform: translate(0%, 0%);
+        transform: translate(0%, 100%);
         --mdc-theme-secondary: #0091EA;
         --mdc-theme-on-secondary: white;
       }
       #knd-widget-remove {
-        transform: translate(0%, 100%);
+        transform: translate(0%, 0%);
         --mdc-theme-secondary: #D50000;
         --mdc-theme-on-secondary: white;
       }
       :host(:hover) #knd-widget-expand {
-        transform: translate(100%, 0%);
+        transform: translate(100%, 100%);
       }
       :host(:hover) #knd-widget-remove {
-        transform: translate(100%, 100%);
+        transform: translate(100%, 0%);
         transition-delay: 0.05s;
       }
       :host(:not([size="medium"])) #knd-widget-expand,
-      :host(:not([size="medium"])) #knd-widget-remove {
+      :host(:not([size="medium"]):not([size="small"])) #knd-widget-remove {
         display: none;
       }
     `;
@@ -175,7 +179,16 @@ export abstract class KndWidgetBase extends LitElement {
     return html`
       <div id="knd-widget-base-wrapper">${contents}</div>
       <div id="knd-widget-expand"><mwc-fab mini icon="fullscreen"></mwc-fab></div>
-      <div id="knd-widget-remove"><mwc-fab mini icon="clear"></mwc-fab></div>`;
+      <div id="knd-widget-remove">
+        <mwc-fab mini icon="clear" @click=${this.fireClose}></mwc-fab>
+      </div>`;
+  }
+
+  fireClose(e: Event) {
+    const closeEvent = new Event('close-widget', {bubbles: true, composed: true});
+    if (e.target) {
+      e.target.dispatchEvent(closeEvent);
+    }
   }
 
   protected abstract renderTiny(): TemplateResult;
