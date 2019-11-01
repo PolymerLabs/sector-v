@@ -1,6 +1,8 @@
 # SectorV
 
-MD Hack project
+MD Hack project.
+
+Hosted at [go/sector-v](https://sector-v-a531a.web.app/) or at https://sector-v-a531a.web.app/.
 
 ## Quickstart
 
