@@ -282,6 +282,7 @@ export class KndApp extends LitElement {
           @close-widget=${this.onCloseWidget}
           @expand-widget=${this.onExpandWidget}
           @update-doc=${this.onUpdateDoc}
+          @delete-doc=${this.onDeleteDoc}
         >
           ${until(widgetsRendered)}
         </div>
@@ -457,5 +458,23 @@ export class KndApp extends LitElement {
     }
 
     this.db.upsert(id, _ => e.detail.doc);
+  }
+
+  protected async onDeleteDoc(e: CustomEvent) {
+    const target = e.target as null | KndWidgetBase;
+    if (!target) {
+      return;
+    }
+
+    const id = target.getAttribute('widgetId');
+
+    if (!id) {
+      return;
+    }
+
+    try {
+      const doc = await this.db.get(id);
+      await this.db.remove(doc);
+    } catch (err) {}
   }
 }

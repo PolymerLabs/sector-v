@@ -27,6 +27,7 @@ import './knd-small';
  * @fires expand-widget
  * @fires close-widget
  * @fires update-doc
+ * @fires delete-doc
  */
 export abstract class KndWidgetBase extends LitElement {
   @property({
@@ -224,6 +225,7 @@ export abstract class KndWidgetBase extends LitElement {
   }
 
   fireClose(e: Event) {
+    this.beforeClose();
     const closeEvent = new Event('close-widget', {
       bubbles: true,
       composed: true
@@ -232,6 +234,14 @@ export abstract class KndWidgetBase extends LitElement {
     if (e.target) {
       e.target.dispatchEvent(closeEvent);
     }
+  }
+
+  protected beforeClose() {
+    const ce = new Event('delete-doc', {
+      bubbles: true,
+      composed: true
+    });
+    this.dispatchEvent(ce);
   }
 
   protected abstract renderTiny(): TemplateResult;
