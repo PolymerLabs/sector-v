@@ -4,7 +4,7 @@ import '@material/mwc-icon/mwc-icon';
 import {Button} from '@material/mwc-button/mwc-button';
 import {css, customElement, html, property} from 'lit-element';
 
-import {fontSize3x} from '../util/base-styles';
+import {fontSize2x, fontSize3x} from '../util/base-styles';
 
 import {KndWidgetBase} from './knd-widget-base';
 
@@ -12,6 +12,29 @@ type Operator = '+'|'-'|'*'|'/';
 
 @customElement('knd-widget-calculator')
 export class Calculator extends KndWidgetBase {
+  static get styles() {
+    const styles = [css`
+      #title {
+        font-size: ${fontSize3x};
+        padding-left: 23px;
+      }
+      mwc-button, #display {
+        font-size: ${fontSize2x} !important;
+      }
+      #display {
+        display: flex;
+        justify-content: space-between;
+        padding: 23px;
+      }
+    `];
+
+    let superStyles = super.styles;
+    if (!Array.isArray(superStyles)) {
+      superStyles = [superStyles];
+    }
+    return superStyles.concat(styles);
+  }
+
   @property({type: Number}) numberInput = 0;
   private resultSoFar = 0;
   private begunTypingNewNumber = true;
@@ -28,21 +51,6 @@ export class Calculator extends KndWidgetBase {
     this.currentOperator = '+';
     this.previousOperator = '+';
     this.previousNumber = 0;
-  }
-
-  static get styles() {
-    const styles = [css`
-      #title {
-        font-size: ${fontSize3x};
-      }
-
-    `];
-
-    let superStyles = super.styles;
-    if (!Array.isArray(superStyles)) {
-      superStyles = [superStyles];
-    }
-    return superStyles.concat(styles);
   }
 
   keydownHandler = (event: KeyboardEvent) => {
@@ -123,13 +131,13 @@ export class Calculator extends KndWidgetBase {
   applyOperation(left: number, right: number, op: Operator) {
     switch (op) {
       case '+':
-        return left + right;
+        return Math.floor(left + right);
       case '-':
-        return left - right;
+        return Math.floor(left - right);
       case '/':
-        return left / right;
+        return Math.floor(left / right);
       case '*':
-        return left * right;
+        return Math.floor(left * right);
       default:
         const never: never = op;
         throw new Error(`Unknown operator: ${never}`);
@@ -139,6 +147,8 @@ export class Calculator extends KndWidgetBase {
   handleOperator(operator: Operator|'=') {
     if (operator !== '=') {
       this.previousOperator = operator;
+      this.previousNumber = this.numberInput;
+    } else if (this.begunTypingNewNumber) {
       this.previousNumber = this.numberInput;
     }
 
@@ -197,9 +207,10 @@ export class Calculator extends KndWidgetBase {
   renderMedium() {
     return html`
       <div id="title">Calculon</div>
-      <div id="numberRow">
-        <div>${this.numberInput.toLocaleString()}</div>
+      <div id="display">
         <div>${this.displayedOperator}</div>
+
+        <div>${this.numberInput.toLocaleString()}</div>
       </div>
       <mwc-button>7</mwc-button>
       <mwc-button>8</mwc-button>
@@ -224,6 +235,6 @@ export class Calculator extends KndWidgetBase {
   }
 
   renderLarge() {
-    return this.renderMedium();
+    return html``;
   }
 }
