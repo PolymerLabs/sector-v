@@ -14,10 +14,12 @@ export interface WidgetCatalog {
 export interface WidgetDescriptor {
   id: string;
   renderer: WidgetRenderer;
+  offlineDoc: Object;
 }
 
 export type WidgetRenderer = (
   widgetId: string,
   size: WidgetSize,
-  active: boolean
+  active: boolean,
+  offlineDoc: Object
 ) => TemplateResult;
