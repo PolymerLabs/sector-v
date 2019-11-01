@@ -37,6 +37,7 @@ import { Radio } from '@material/mwc-radio';
 import { size100x, fontSize1x, size1x } from '../util/base-styles';
 import { generatePseudoUid, isIdInWidgetNames } from '../util/uid';
 import { loadMaterialFonts } from '../util/font-loader';
+import { WIDGETS } from '../util/constants';
 
 const sizes: ReadonlySet<WidgetSize> = new Set<WidgetSize>([
   'tiny',
@@ -225,21 +226,19 @@ export class KndApp extends LitElement {
         @closed=${this.onAddDialogClose}
         title="Add a widget!"
       >
-        <mwc-formfield label="Calculon">
-          <mwc-radio
-            name="addWidget"
-            value="knd-widget-calculator"
-            dialogInitialFocus
-            checked
-          >
-          </mwc-radio>
-        </mwc-formfield>
-        <mwc-formfield label="Huey">
-          <mwc-radio name="addWidget" value="knd-widget-hue"></mwc-radio>
-        </mwc-formfield>
-        <mwc-formfield label="Todo">
-          <mwc-radio name="addWidget" value="test-widget"></mwc-radio>
-        </mwc-formfield>
+        ${Object.keys(WIDGETS).map<TemplateResult>((widgetName, i) => {
+          const widgetData = WIDGETS[widgetName];
+          return html`
+            <mwc-formfield label="${widgetData.friendlyName}">
+              <mwc-radio
+                name="addWidget"
+                .checked=${i === 0}
+                .value="${widgetName}"
+              >
+              </mwc-radio>
+            </mwc-formfield>
+          `;
+        })}
         <mwc-button slot="primaryAction" dialogAction="add">
           add
         </mwc-button>

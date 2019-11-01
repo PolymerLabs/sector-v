@@ -1,32 +1,41 @@
 import PouchDBType from 'pouchdb-browser';
 import { WidgetDescriptor, WidgetRenderer } from './types';
-import { WIDGET_RENDERERS } from './constants';
+import { WIDGETS } from './constants';
 export const PouchDB: typeof PouchDBType = window.PouchDB;
 export const DB_NAME = 'knd-app';
 
-export type UpsertDiffCallback<T extends {}> = (doc: PouchDB.Core.Document<T>) => T & Partial<PouchDB.Core.IdMeta> | PouchDB.CancelUpsert;
+export type UpsertDiffCallback<T extends {}> = (
+  doc: PouchDB.Core.Document<T>
+) => T & Partial<PouchDB.Core.IdMeta> | PouchDB.CancelUpsert;
 
 export interface WidgetName {
-  name: string,
-  id: string
+  name: string;
+  id: string;
 }
-export interface WidgetsSchema  {
+export interface WidgetsSchema {
   names: WidgetName[];
 }
 
 export interface DBSchema {
-  widgets: WidgetsSchema
+  widgets: WidgetsSchema;
 }
 
 export const docNames = {
-  WIDGETS: 'widgets',
-}
+  WIDGETS: 'widgets'
+};
 
-const getRenderer = (name: string): undefined | WidgetRenderer => {
-  return WIDGET_RENDERERS[name];
-}
+const getRenderer = (name: string): null | WidgetRenderer => {
+  const widget = WIDGETS[name];
+  if (!widget) {
+    return null;
+  }
 
-export const schemaToDescriptor = async (doc: WidgetsSchema): Promise<WidgetDescriptor[]> => {
+  return widget.renderer;
+};
+
+export const schemaToDescriptor = async (
+  doc: WidgetsSchema
+): Promise<WidgetDescriptor[]> => {
   const widgets: WidgetDescriptor[] = [];
   for (let widgetName of doc.names) {
     const renderer = getRenderer(widgetName.name);
@@ -38,10 +47,10 @@ export const schemaToDescriptor = async (doc: WidgetsSchema): Promise<WidgetDesc
     const descriptor: WidgetDescriptor = {
       id: widgetName.id,
       renderer
-    }
+    };
 
     widgets.push(descriptor);
   }
 
   return widgets;
-}
+};
