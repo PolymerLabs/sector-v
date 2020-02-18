@@ -6,7 +6,7 @@ _A technological home for your browser_
 
 Explores possibilities of current theming system, capabilities of certain
 [MWC](https://github.com/material-components/material-components-web-components)
-components, possible patterns for database queries in lit-html, and mocking how
+components, possible patterns for database queries in lit-element, and mocking how
 Web Component as conformed microservices could work.
 
 ⚠️ **NOTE: this is not an official recommendation by the Polymer team - only an exploration** ⚠️
