@@ -1,8 +1,16 @@
 # SectorV
 
-MD Hack project.
+MD Hackathon 2019 project.
 
-Hosted at [go/sector-v](https://sector-v-a531a.web.app/) or at https://sector-v-a531a.web.app/.
+_A technological home for your browser_
+
+Explores possibilities of current theming system, capabilities of certain
+[MWC](https://github.com/material-components/material-components-web-components)
+components, possible patterns for database queries in lit-html, and mocking how
+Web Component as conformed microservices could work.
+
+Hosted at [go/sector-v](https://sector-v-a531a.web.app/) or at
+https://sector-v-a531a.web.app/.
 
 ## Quickstart
 
